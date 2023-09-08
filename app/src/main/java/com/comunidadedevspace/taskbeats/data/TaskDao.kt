@@ -27,4 +27,5 @@ interface TaskDao   {
     //Delete pelo id
     @Query("Delete from task WHERE id =:id")
     fun deleteById(id: Int)
+
 }
