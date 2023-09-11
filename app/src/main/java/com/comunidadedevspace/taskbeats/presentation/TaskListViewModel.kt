@@ -13,52 +13,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 //classe q preciso ter dependencia que eh a classe Dao
-class TaskListViewModel(
-    private val taskDao: TaskDao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
- ): ViewModel() {
+class TaskListViewModel(taskDao: TaskDao): ViewModel() { //TaskListViewModel so lista
 
     //assim tenho meu livedata no viewmodel
     val taskListLiveData: LiveData<List<Task>> = taskDao.getAll()
 
-    fun execute(taskAction: TaskAction) {
-        when (taskAction.actionType) {
-            ActionType.DELETE.name -> deleteByID(taskAction.task!!.id)
-            ActionType.CREATE.name -> insertIntoDataBase(taskAction.task!!)
-            ActionType.UPDATE.name -> updateIntoDataBase(taskAction.task!!)
-            ActionType.DELETE_ALL.name -> deleteAll()
-        }
-    }
 
-    private fun deleteByID(id: Int){
-        viewModelScope.launch(dispatcher) {
-            taskDao.deleteById(id)
-        }
-
-    }
-
-    private fun insertIntoDataBase(task: Task) {
-        viewModelScope.launch(dispatcher) {
-            taskDao.insert(task) //insiro a nova tarefa
-
-        }
-
-    }
-
-    private fun updateIntoDataBase(task: Task) {
-        viewModelScope.launch(dispatcher) {
-            taskDao.update(task) //update da tarefa
-
-        }
-
-    }
-
-    private fun deleteAll(){
-       viewModelScope.launch(dispatcher) {
-           taskDao.deleteALl()
-
-        }
-    }
     companion object{
 
         //essa fun vai me retornar/criar um viewmodel

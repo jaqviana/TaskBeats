@@ -1,6 +1,5 @@
 package com.comunidadedevspace.taskbeats.presentation
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,15 +10,20 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import androidx.activity.viewModels
 import com.comunidadedevspace.taskbeats.R
 import com.comunidadedevspace.taskbeats.data.Task
 import com.google.android.material.snackbar.Snackbar
 
 class TaskDetailActivity : AppCompatActivity() {
 
-    private var task: Task? = null
+   private var task: Task? = null
    private lateinit var btnDone: Button
 
+
+    //criando (a instacncia) do viewmodel                                                                    //factor vai falar como criar meu viewmodel
+   private val viewModel: TaskDetailViewModel by viewModels {
+        TaskDetailViewModel.getVMFactory(application)} // by viewModels nao consome memoria (val e espaco na memoria) so qdo usar
     companion object {
         private const val TASK_DETAIL_EXTRA = "task.extra.detail"
 
@@ -79,7 +83,7 @@ class TaskDetailActivity : AppCompatActivity() {
         actionType: ActionType
     ){
         val task = Task(id, title, description)
-        returnAction(task, actionType)
+        performAction(task, actionType)
     }
     //inflar/colocar o menu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,7 +97,7 @@ class TaskDetailActivity : AppCompatActivity() {
             R.id.delete_task -> {
 
                 if (task != null) {
-                   returnAction(task!!, ActionType.DELETE)
+                   performAction(task!!, ActionType.DELETE)
 
                 } else {
                     showMassage(btnDone, "Item not found")
@@ -106,14 +110,10 @@ class TaskDetailActivity : AppCompatActivity() {
         }
     }
 
-    private fun returnAction(task: Task?, actionType: ActionType){
-        val intent = Intent()
-            .apply {
-                val taskAction = TaskAction(task!!, actionType.name)
-                putExtra(TASK_ACTION_RESULT, taskAction)
-            }
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+    private fun performAction(task: Task, actionType: ActionType){
+            val taskAction = TaskAction(task, actionType.name)
+            viewModel.execute(taskAction) //para chamar a funcao executar eu preciso ter um viewmodel, para ter um viewmodel eu preciso criar uma instancia desse viewmodel (linha 40 -  private val viewModel: TaskDetailViewModel by viewModels {factory})
+             finish()
     }
 
     private fun showMassage(view: View, message: String){
