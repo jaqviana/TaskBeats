@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.comunidadedevspace.taskbeats.R
-import com.comunidadedevspace.taskbeats.data.Task
+import com.comunidadedevspace.taskbeats.data.local.Task
 
-class TaskListAdapter (
+class TaskListAdapter(
 
     private val openTaskDetailView: (task: Task) -> Unit
 ) : ListAdapter<Task, TaskListViewHolder>(TaskListAdapter) {
@@ -19,20 +19,20 @@ class TaskListAdapter (
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskListViewHolder {
         val view: View = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.item_task,parent,false)
-        return  TaskListViewHolder(view)
+            .inflate(R.layout.item_task, parent, false)
+        return TaskListViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TaskListViewHolder, position: Int) {
         val task = getItem(position)
-         holder.bind(task, openTaskDetailView)
+        holder.bind(task, openTaskDetailView)
     }
 
 
-    companion object : DiffUtil.ItemCallback<Task>(){
+    companion object : DiffUtil.ItemCallback<Task>() {
 
         override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
-           return oldItem == newItem
+            return oldItem == newItem
 
         }
 
@@ -45,10 +45,11 @@ class TaskListAdapter (
     }
 
 }
+
 //viewHolder responsavel por recuperar a viw pelo id
 class TaskListViewHolder(
     private val view: View
-    ) : RecyclerView.ViewHolder(view){
+) : RecyclerView.ViewHolder(view) {
 
     private val tvTitle = view.findViewById<TextView>(R.id.tv_task_title)
     private val tvDesc = view.findViewById<TextView>(R.id.tv_task_description)
@@ -63,6 +64,6 @@ class TaskListViewHolder(
 
         view.setOnClickListener {
             openTaskDetailView.invoke(task)
+        }
     }
 }
-    }

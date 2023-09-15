@@ -2,7 +2,6 @@ package com.comunidadedevspace.taskbeats.presentation
 
 
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.comunidadedevspace.taskbeats.R
-import com.comunidadedevspace.taskbeats.data.News
+import com.comunidadedevspace.taskbeats.data.local.News
 
 
 class NewsListAdapter : ListAdapter<News, NewsListViewHolder>(NewsListAdapter) {
